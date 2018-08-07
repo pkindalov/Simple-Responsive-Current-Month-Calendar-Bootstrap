@@ -1,0 +1,21 @@
+
+
+th,td{
+        text-align: center;
+        border: 1px solid black;
+        padding: 2px;
+    }
+
+.emptyCells{
+    background-color: gray;
+}
+
+.today{
+    background-color: black;
+    color: white;
+}
+
+#calendarCont{
+    margin-top: 20px;
+}
+

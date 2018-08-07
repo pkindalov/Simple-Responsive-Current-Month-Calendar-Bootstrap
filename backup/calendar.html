@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calendar</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<style type="text/css">
+	th,td{
+		text-align: center;
+		border: 1px solid black;
+		padding: 2px;
+	}
+
+	.emptyCells{
+		background-color: gray;
+	}
+
+	.today{
+		background-color: black;
+		color: white;
+	}
+</style>
+
+
+<body>
+
+<div id="calendarCont"></div>
+
+
+
+
+		
+</body>
+<script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous">	
+</script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script 
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+	crossorigin="anonymous">		
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		let date = new Date()
+		let month = date.getMonth() + 1
+		let year = date.getFullYear()
+		let daysStr = new Date(year, month, 0) + ""
+		let days = Number(daysStr.split(" ")[2])
+		let firstDayOfMontStr = new Date(year, month - 1, 1) + ""
+		let firstDayOfMont = firstDayOfMontStr.split(" ")[0]
+		let currentDay = date.getDate()
+		let lastDayOfMont = daysStr.split(" ")[0]
+
+
+
+		let weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+		let fromWhichPosStartNums = 0
+
+		switch(firstDayOfMont){
+			case 'Mon':
+				fromWhichPosStartNums = 0
+				break;
+			case 'Tue':
+				fromWhichPosStartNums = 1
+				break
+			case 'Wed':
+				fromWhichPosStartNums = 2
+				break
+			case 'Thu':
+				fromWhichPosStartNums = 3
+				break
+			case 'Fri':
+				fromWhichPosStartNums = 4	
+				break
+			case 'Sat':
+				fromWhichPosStartNums = 5
+				break
+			case 'Sun':
+				fromWhichPosStartNums = 6
+				break
+			default:
+				fromWhichPosStartNums = 0
+				break						
+		}
+
+
+
+		let howMuchEmptyCellInTheEnd = 0
+
+		switch(lastDayOfMont){
+			case 'Mon':
+				howMuchEmptyCellInTheEnd = 6
+				break;
+			case 'Tue':
+				howMuchEmptyCellInTheEnd = 5
+				break
+			case 'Wed':
+				howMuchEmptyCellInTheEnd = 4
+				break
+			case 'Thu':
+				howMuchEmptyCellInTheEnd = 3
+				break
+			case 'Fri':
+				howMuchEmptyCellInTheEnd = 2	
+				break
+			case 'Sat':
+				howMuchEmptyCellInTheEnd = 1
+				break
+			case 'Sun':
+				howMuchEmptyCellInTheEnd = 0
+				break
+			default:
+				howMuchEmptyCellInTheEnd = 0
+				break		
+		}
+
+
+
+
+		// let calendarTable = $('<table id="calendar"></table>')
+		// let firstTableRow = $('<tr></tr>')
+		// firstTableRow.appendTo(calendarTable)
+
+		let calendarTable = '<table id="calendar">'
+		calendarTable += '<tr>'
+
+
+		// let emptyCells = 0
+		// let count = 0
+		// let multyplier = 1
+
+		//fill days name on first row of the table
+		// for(let dayName = 0; dayName < 7; dayName++){
+		// 	let th = $('<th></th>')
+		// 	th.text(weekDays[dayName])
+		// 	th.appendTo(firstTableRow)
+		// }
+
+		for(let dayName = 0; dayName < 7; dayName++){
+			calendarTable += '<th>' + weekDays[dayName] + '</th>'
+			// th.text(weekDays[dayName])
+			// th.appendTo(firstTableRow)
+		}
+
+		calendarTable += '</tr>'
+
+
+
+		calendarTable += '<tr>'
+
+
+		for(let d = 0; d < days + fromWhichPosStartNums; d++){
+
+			//count empty cells
+			if (d < fromWhichPosStartNums) {
+				calendarTable += '<td class="emptyCells">&nbsp;</td>'
+				// emptyCells++
+			}
+
+
+			//from where to start fill td , example from wednesday - monday - pos[0], tuesd - pos[1], wednesd - pos[2]...
+			if(d  >= fromWhichPosStartNums){
+				if(d === currentDay + fromWhichPosStartNums - 1){
+					calendarTable += '<td class="today">' + (d - fromWhichPosStartNums + 1) + '</td>'
+				} else{
+					calendarTable += '<td>' + (d - fromWhichPosStartNums + 1) + '</td>'
+					
+				}
+			}
+
+
+			if((d + 1) % 7  === 0){
+				calendarTable += '</tr>'
+				// multyplier++
+			}
+
+			// if((d + emptyCells) % 7  === 0){
+			// 	calendarTable += '</tr>'
+			// 	multyplier++
+			// }
+			// if(d > 31){
+			// 	for(let a = 0; a < howMuchEmptyCellInTheEnd; a++){
+			// 		calendarTable += '<td>&nbsp;</td>'
+			// 	}
+			// }
+
+			if(d === days + fromWhichPosStartNums - 1){
+				for(let a = 0; a < howMuchEmptyCellInTheEnd; a++){
+					calendarTable += '<td class="emptyCells">&nbsp;</td>'
+				}
+			}
+
+
+		}	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		calendarTable += '</table>'
+
+		// let tr = $('<tr></tr>')
+		// tr.appendTo(calendarTable)
+
+
+
+
+
+		$(calendarTable).appendTo(calendarCont)
+
+
+		//fill days
+		// let multyplier = 1
+		// let newRowsStartFrom = 0
+
+		// for(let d = 0; d <= days + 1; d++){
+		// 	// debugger;
+		// 	let td = $('<td></td>')
+
+		// 	//count empty cells
+		// 	if (d < fromWhichPosStartNums) {
+		// 		td.text('')
+		// 		emptyCells++
+		// 		td.appendTo(tr)
+		// 	}
+
+		// 	//from where to start fill td , example from wednesday - monday - pos[0], tuesd - pos[1], wednesd - pos[2]...
+		// 	if(d  >= fromWhichPosStartNums){
+		// 		td.text(d - 1)
+		// 		td.appendTo(tr)
+		// 	}
+
+		// 	//where to put new table row - tr
+		// 	if(d  == (7 - emptyCells)){
+		// 		calendarTable += '<tr>'
+		// 	}
+			
+			// if(d -1  == (7 - emptyCells)){
+			// 	let tr = $('<tr></tr>')
+			// 	let td = $('<td></td>')
+			// 	td.text(d)
+
+			// 	td.appendTo(tr)
+			// 	tr.appendTo(calendarTable)
+				
+			// 	// multyplier++
+			// 	console.log(d)
+			// }
+
+			// if(d == )
+
+			// td.appendTo(tr)
+
+
+		// }	
+
+
+
+
+
+
+
+
+
+		// alert(emptyCells)
+
+	// 	let multyplier = 1
+
+	// 		let tr = $('<tr></tr>')
+	// 		tr.appendTo(calendarTable)
+	// 	//fill days
+	// 	for(let d = 1; d <= days; d++){
+	// 		let td = $('<td></td>')
+	// 		td.text('')
+	// 		td.appendTo(tr)
+
+
+	// 		if(d >= fromWhichPosStartNums){
+	// 			td.text(d)
+	// 			td.appendTo(tr)
+	// 		}
+
+	// 		if((d + 7) / 2 == 7 * multyplier){
+	// 				let newTr = $('<tr></tr>')
+
+	// 			for(let a = d + 1; a < 15; a++){
+
+	// 				let newTd = $('<td></td>')
+	// 				d++
+	// 				newTd.text(d)
+	// 				newTd.appendTo(newTr)
+	// 				newTr.appendTo(calendarTable)
+	// 			}
+
+
+	// 			multyplier++
+	// 		}
+
+
+
+	// 	}
+
+
+	// calendarTable.appendTo(calendarCont)	
+
+
+	})
+</script>
+</html>
